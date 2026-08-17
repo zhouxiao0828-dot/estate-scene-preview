@@ -1,10 +1,10 @@
 const regions = [
-  { id: 'dock', name: '私人码头', x: 43, y: 26, icon: 'anchor', image: 'assets/dock.png' },
-  { id: 'treehouse', name: '树屋乐园', x: 72, y: 31, icon: 'trees', image: 'assets/treehouse.png' },
-  { id: 'bbq', name: '烧烤野餐', x: 52, y: 41, icon: 'cooking-pot', image: 'assets/bbq.png' },
-  { id: 'pool', name: '泳池', x: 34, y: 53, icon: 'waves', image: 'assets/pool.png' },
-  { id: 'greenhouse', name: '玻璃花房', x: 20, y: 67, icon: 'flower-2', image: 'assets/greenhouse.png' },
-  { id: 'house', name: '主住宅', x: 72, y: 67, icon: 'house', image: 'assets/house.png' }
+  { id: 'dock', name: '私人码头', x: 43, y: 26, icon: 'anchor', image: 'assets/dock.png', video: 'assets/dock.mov' },
+  { id: 'treehouse', name: '树屋乐园', x: 72, y: 31, icon: 'trees', image: 'assets/treehouse.png', video: 'assets/treehouse.mov' },
+  { id: 'bbq', name: '烧烤野餐', x: 52, y: 41, icon: 'cooking-pot', image: 'assets/bbq.png', video: 'assets/bbq.mov' },
+  { id: 'pool', name: '泳池', x: 34, y: 53, icon: 'waves', image: 'assets/pool.png', video: 'assets/pool.mov' },
+  { id: 'greenhouse', name: '玻璃花房', x: 20, y: 67, icon: 'flower-2', image: 'assets/greenhouse.png', video: 'assets/greenhouse.mov' },
+  { id: 'house', name: '主住宅', x: 72, y: 67, icon: 'house', image: 'assets/house.png', video: 'assets/house.mov' }
 ];
 
 const DB_NAME = 'estate-transition-assets';
@@ -147,7 +147,7 @@ async function loadMapImage() {
   const stored = await getStoredFile('map:image');
   revokeUrl('map:image');
   if (!stored) {
-    mapImage.src = 'assets/estate-map.png';
+    mapImage.src = 'assets/estate-map.jpg';
     return;
   }
   const url = URL.createObjectURL(stored);
@@ -176,17 +176,22 @@ async function enterRegion(region) {
   mapView.classList.add('is-zoomed');
 
   const videoFile = await getStoredFile(`${region.id}:video`);
-  if (videoFile) {
-    window.setTimeout(() => playTransitionVideo(videoFile), 520);
+  if (videoFile || region.video) {
+    window.setTimeout(() => playTransitionVideo(videoFile || region.video), 520);
   } else {
     window.setTimeout(showDetail, 720);
   }
 }
 
-async function playTransitionVideo(file) {
+async function playTransitionVideo(source) {
   if (currentVideoUrl) URL.revokeObjectURL(currentVideoUrl);
-  currentVideoUrl = URL.createObjectURL(file);
-  transitionVideo.src = currentVideoUrl;
+  if (typeof source === 'string') {
+    currentVideoUrl = '';
+    transitionVideo.src = source;
+  } else {
+    currentVideoUrl = URL.createObjectURL(source);
+    transitionVideo.src = currentVideoUrl;
+  }
   transitionVideo.currentTime = 0;
   videoView.classList.add('is-visible');
   videoView.setAttribute('aria-hidden', 'false');
