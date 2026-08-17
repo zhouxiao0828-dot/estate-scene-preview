@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>庄园区域转场预览</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app" id="app">
+    <section class="stage" aria-label="庄园区域转场预览">
+      <div class="map-view" id="mapView">
+        <img id="mapImage" src="assets/estate-map.png" alt="湖畔庄园大地图">
+        <div id="hotspots" class="hotspots"></div>
+      </div>
+
+      <div class="video-view" id="videoView" aria-hidden="true">
+        <video id="transitionVideo" muted playsinline preload="auto"></video>
+        <button class="tool-button skip-button" id="skipButton" type="button">跳过</button>
+      </div>
+
+      <div class="detail-view" id="detailView" aria-hidden="true">
+        <img id="detailImage" alt="">
+        <div class="detail-bar">
+          <button class="tool-button" id="backButton" type="button">返回地图</button>
+          <strong id="detailTitle"></strong>
+        </div>
+      </div>
+
+      <button class="tool-button settings-button" id="settingsButton" type="button">素材</button>
+      <div class="transition-mask" id="transitionMask"></div>
+    </section>
+
+    <dialog class="asset-dialog" id="assetDialog">
+      <form method="dialog" class="asset-panel">
+        <header class="asset-header">
+          <h1>素材设置</h1>
+          <button class="tool-button" value="close" type="submit">完成</button>
+        </header>
+
+        <div class="map-asset-row">
+          <div>
+            <strong>大地图</strong>
+            <span id="mapStatus">默认图片</span>
+          </div>
+          <label class="file-button">替换图片<input id="mapInput" type="file" accept="image/*"></label>
+        </div>
+
+        <div class="asset-list" id="assetList"></div>
+        <button class="reset-button" id="resetButton" type="button">恢复默认素材</button>
+      </form>
+    </dialog>
+  </main>
+
+  <script src="lucide.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
